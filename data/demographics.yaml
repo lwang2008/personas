@@ -1,0 +1,334 @@
+total:
+  source: Age/Gender -> 2024 U.S. Census, Ethnicity -> Projected of December 2025, Sexual Orientation/Party Affiliation-> Gallup 
+  notes: all caterogires are mutually exclusive 
+
+schema:
+  age: ["18-29","30-44","45-64","65+"]
+  gender: ["male","female"]
+  ethnicity: ["hispanic","white","black","asian", "native american/pacific islander"other"]
+  orientation: ["straight","gay","bi","other"]
+  party: ["republican","democrat","independent","other"]
+
+marginals:
+  age:
+    "18-29": 0.1877
+    "30-44": 0.2479
+    "45-64": 0.3152
+    "65+": 0.2492
+  gender:
+    male: 0.4902
+    female: 0.5098
+  ethnicity:
+    hispanic: 0.1860
+    white: 0.5944
+    black: 0.1231
+    asian: 0.0683
+    native american/pacific islander: 0.0091
+    other: 0.0190
+  orientation:
+    straight: 0.907
+    gay/lesbian: 0.034
+    bi: 0.052
+    other: 0.007
+  party:
+    republican: 0.27
+    democrat: 0.27
+    independent: 0.45
+    other: 0.01
+
+conditionals:
+  age|gender:
+    male:
+      "18-29": 0.22
+      "30-44": 0.27
+      "45-64": 0.31
+      "65+": 0.20
+    female:
+      "18-29": 0.20
+      "30-44": 0.26
+      "45-64": 0.34
+      "65+": 0.20
+
+  orientation|gender:
+    male:
+      straight: 0.93
+      gay: 0.03
+      bi: 0.03
+      other: 0.01
+    female:
+      straight: 0.94
+      gay: 0.02
+      bi: 0.03
+      other: 0.01
+
+  ethnicity|gender:
+    male:
+      hispanic: 0.19
+      white: 0.57
+      black: 0.12
+      asian: 0.07
+      other: 0.05
+    female:
+      hispanic: 0.19
+      white: 0.58
+      black: 0.12
+      asian: 0.07
+      other: 0.04
+
+  party|age:
+    "18-29":
+      republican: 0.25
+      democrat: 0.40
+      independent: 0.32
+      other: 0.03
+    "30-44":
+      republican: 0.30
+      democrat: 0.36
+      independent: 0.30
+      other: 0.04
+    "45-64":
+      republican: 0.36
+      democrat: 0.32
+      independent: 0.28
+      other: 0.04
+    "65+":
+      republican: 0.40
+      democrat: 0.34
+      independent: 0.23
+      other: 0.03
+
+  orientation|age:
+    "18-29":
+      straight: 0.85
+      gay: 0.05
+      bi: 0.09
+      other: 0.01
+    "30-44":
+      straight: 0.88
+      gay: 0.04
+      bi: 0.07
+      other: 0.01
+    "45-64":
+      straight: 0.91
+      gay: 0.03
+      bi: 0.05
+      other: 0.01
+    "65+":
+      straight: 0.94
+      gay: 0.02
+      bi: 0.03
+      other: 0.01
+
+  orientation|ethnicity:
+    white:
+      straight: 0.92
+      gay: 0.03
+      bi: 0.04
+      other: 0.01
+    black:
+      straight: 0.90
+      gay: 0.04
+      bi: 0.05
+      other: 0.01
+    hispanic:
+      straight: 0.89
+      gay: 0.04
+      bi: 0.06
+      other: 0.01
+    asian:
+      straight: 0.93
+      gay: 0.02
+      bi: 0.04
+      other: 0.01
+    other:
+      straight: 0.91
+      gay: 0.03
+      bi: 0.05
+      other: 0.01
+
+  party|gender:
+    male:
+      republican: 0.52
+      democrat: 0.46
+      independent: 0.01
+      other: 0.01
+    female:
+      republican: 0.44
+      democrat: 0.51
+      independent: 0.04
+      other: 0.01
+
+  party|gender,orientation:
+    male:
+      straight:
+        republican: 0.55
+        democrat: 0.40
+        independent: 0.04
+        other: 0.01
+      gay:
+        republican: 0.17
+        democrat: 0.83
+        independent: 0.00
+        other: 0.00
+      bi:
+        republican: 0.17
+        democrat: 0.83
+        independent: 0.00
+        other: 0.00
+      other:
+        republican: 0.12
+        democrat: 0.78
+        independent: 0.08
+        other: 0.02
+    female:
+      straight:
+        republican: 0.47
+        democrat: 0.48
+        independent: 0.04
+        other: 0.01
+      gay:
+        republican: 0.12
+        democrat: 0.83
+        independent: 0.04
+        other: 0.01
+      bi:
+        republican: 0.12
+        democrat: 0.83
+        independent: 0.04
+        other: 0.01
+      other:
+        republican: 0.10
+        democrat: 0.80
+        independent: 0.08
+        other: 0.02
+
+  party|ethnicity:
+    white:
+      republican: 0.56
+      democrat: 0.41
+      independent: 0.02
+      other: 0.01
+    black:
+      republican: 0.12
+      democrat: 0.83
+      independent: 0.04
+      other: 0.01
+    hispanic:
+      republican: 0.35
+      democrat: 0.61
+      independent: 0.03
+      other: 0.01
+    asian:
+      republican: 0.36
+      democrat: 0.63
+      independent: 0.00
+      other: 0.01
+    other:
+      republican: 0.30
+      democrat: 0.60
+      independent: 0.08
+      other: 0.02
+
+  party|ethnicity,gender:
+    white:
+      male:
+        republican: 0.60
+        democrat: 0.37
+        independent: 0.02
+        other: 0.01
+      female:
+        republican: 0.53
+        democrat: 0.44
+        independent: 0.02
+        other: 0.01
+    black:
+      male:
+        republican: 0.18
+        democrat: 0.81
+        independent: 0.00
+        other: 0.01
+      female:
+        republican: 0.15
+        democrat: 0.84
+        independent: 0.00
+        other: 0.01
+    hispanic:
+      male:
+        republican: 0.38
+        democrat: 0.61
+        independent: 0.00
+        other: 0.01
+      female:
+        republican: 0.34
+        democrat: 0.60
+        independent: 0.05
+        other: 0.01
+    asian:
+      male:
+        republican: 0.38
+        democrat: 0.61
+        independent: 0.00
+        other: 0.01
+      female:
+        republican: 0.35
+        democrat: 0.64
+        independent: 0.00
+        other: 0.01
+    other:
+      male:
+        republican: 0.32
+        democrat: 0.58
+        independent: 0.08
+        other: 0.02
+      female:
+        republican: 0.28
+        democrat: 0.62
+        independent: 0.08
+        other: 0.02
+
+  party|age,gender:
+    "18-29":
+      male:
+        republican: 0.28
+        democrat: 0.32
+        independent: 0.37
+        other: 0.03
+      female:
+        republican: 0.18
+        democrat: 0.50
+        independent: 0.29
+        other: 0.03
+    "30-44":
+      male:
+        republican: 0.32
+        democrat: 0.34
+        independent: 0.31
+        other: 0.03
+      female:
+        republican: 0.25
+        democrat: 0.42
+        independent: 0.30
+        other: 0.03
+    "45-64":
+      male:
+        republican: 0.38
+        democrat: 0.30
+        independent: 0.29
+        other: 0.03
+      female:
+        republican: 0.34
+        democrat: 0.34
+        independent: 0.29
+        other: 0.03
+    "65+":
+      male:
+        republican: 0.43
+        democrat: 0.30
+        independent: 0.24
+        other: 0.03
+      female:
+        republican: 0.38
+        democrat: 0.35
+        independent: 0.24
+        other: 0.03
+  
