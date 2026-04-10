@@ -120,9 +120,7 @@ def combine_two_fixed_distributions(
     for attr, values in schema.items():
         if attr in (attr1, attr2):
             continue
-        # Get P(attr|attr1=val1)
         d1 = cond1.get(attr, {}).get(val1)
-        # Get P(attr|attr2=val2)
         d2 = cond2.get(attr, {}).get(val2)
         if d1 and d2:
             per_attr[attr] = soft_product_distributions(d1, d2)
@@ -131,79 +129,12 @@ def combine_two_fixed_distributions(
         elif d2:
             per_attr[attr] = normalize(dict(d2))
         else:
-            per_attr[attr] = uniform_over(values)
+            marginal = data.get("marginals", {}).get(attr)
+            if isinstance(marginal, dict):
+                per_attr[attr] = normalize({v: marginal.get(v, 0.0) for v in values})
+            else:
+                per_attr[attr] = uniform_over(values)
     return per_attr
-
-
-# -----------------------
-# Scoring and sampling
-# -----------------------
-
-def compute_conditional_distribution(
-    fixed_param_name: str,
-    fixed_param_value: str,
-    schema: Dict[str, List[str]],
-    conditionals: Dict[str, Dict[str, Dict[str, float]]],
-) -> Dict[Tuple[Tuple[str, str], ...], float]:
-    remaining_attrs: List[str] = [a for a in schema.keys() if a != fixed_param_name]
-    for attr in remaining_attrs:
-        if attr not in conditionals or fixed_param_value not in conditionals[attr]:
-            raise ValueError(
-                f"Missing P({attr}|{fixed_param_name}={fixed_param_value}) table"
-            )
-
-    combos: List[Tuple[str, ...]] = list(
-        product(*[schema[attr] for attr in remaining_attrs])
-    )
-
-    def log_score(choice_tuple: Tuple[str, ...]) -> float:
-        total = 0.0
-        for attr, val in zip(remaining_attrs, choice_tuple):
-            p = conditionals[attr][fixed_param_value].get(val, 0.0)
-            if p <= 0.0:
-                return -1e12
-            total += math.log(p)
-        return total
-
-    logs = [log_score(c) for c in combos]
-    m = max(logs)
-    exps = [math.exp(x - m) for x in logs]
-    Z = sum(exps)
-    probs = [e / Z for e in exps]
-
-    results: Dict[Tuple[Tuple[str, str], ...], float] = {}
-    for combo, p in zip(combos, probs):
-        key = tuple((attr, val) for attr, val in zip(remaining_attrs, combo))
-        results[key] = p
-    return results
-
-
-def build_conditionals_from_yaml(data: Dict[str, Any], fixed_param: str) -> Dict[str, Dict[str, Dict[str, float]]]:
-    out: Dict[str, Dict[str, Dict[str, float]]] = {}
-    cond = data.get("conditionals", {})
-    for key, table in cond.items():
-        parts = [p.strip() for p in key.split("|")]
-        if len(parts) != 2:
-            continue
-        attr, given = parts
-        if given != fixed_param:
-            continue
-        out[attr] = table
-    schema = data.get("schema", {})
-    marginals = data.get("marginals", {})
-    for attr, values in schema.items():
-        if attr == fixed_param:
-            continue
-        if attr not in out and attr in marginals:
-            m = marginals[attr]
-            s = sum(m.get(v, 0.0) for v in values) or 1.0
-            uniformized = {v: (m.get(v, 0.0) / s) for v in values}
-            out[attr] = {fv: dict(uniformized) for fv in data["schema"][fixed_param]}
-    return out
-
-
-# Note: no pairwise adjustments parsed from YAML; computation uses only available conditionals/marginals.
-
 
 # -----------------------
 # Persona generator
