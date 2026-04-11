@@ -48,8 +48,17 @@ def count_answers(results: List[Dict], question_ids: List[int]) -> Dict[int, Cou
 # Plotting
 # -----------------------
 
-# Muted qualitative palette — works for up to 6 choices
+# Muted qualitative palette — extended automatically beyond 6 choices via color cycle
 _COLORS = ["#4878CF", "#6ACC65", "#D65F5F", "#B47CC7", "#C4AD66", "#77BEDB"]
+
+
+def _choice_colors(n: int) -> list:
+    """Return n colors, cycling through matplotlib's default palette beyond 6."""
+    if n <= len(_COLORS):
+        return _COLORS[:n]
+    prop_cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+    cycle = _COLORS + [c for c in prop_cycle if c not in _COLORS]
+    return [cycle[i % len(cycle)] for i in range(n)]
 
 
 def _truncate(text: str, n: int) -> str:
@@ -71,11 +80,12 @@ def plot_results(
         nrows, ncols,
         figsize=(15, nrows * 3.8),
         constrained_layout=True,
+        squeeze=False,
     )
     fig.suptitle(survey_title, fontsize=13, fontweight="bold")
 
-    # Always work with a flat list
-    axes_flat = axes.flatten() if n_questions > 1 else [axes]
+    # Always work with a flat list (squeeze=False guarantees 2D array)
+    axes_flat = axes.flatten()
 
     n_respondents = sum(next(iter(counts.values())).values()) if counts else 0
 
@@ -97,7 +107,7 @@ def plot_results(
         bars = ax.barh(
             labels[::-1],
             values[::-1],
-            color=_COLORS[: len(letters)],
+            color=_choice_colors(len(letters)),
             edgecolor="white",
             linewidth=0.6,
         )

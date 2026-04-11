@@ -83,5 +83,6 @@ To be implemented:
     1. additional demographic information (location, etc.)
     2. additional surveys
     3. objective metrics for comparing llm survey results with real survey results
+    4. implement steering vectors? -> would require switching to open-source LLM
 
 

@@ -1,0 +1,9 @@
+title: "Physician-Assisted Death"
+
+questions:
+  - id: 1
+    text: "Patients choosing to end their lives with the help of a doctor is ______."
+    choices:
+      a: "Morally wrong"
+      b: "Morally acceptable"
+      c: "Not a moral issue"

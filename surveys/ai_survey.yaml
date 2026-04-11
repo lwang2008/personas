@@ -1,0 +1,16 @@
+title: "Republicans, Democrats now equally concerned about AI in daily life, but views on regulation differ"
+source: "Pew Research Center"
+
+questions:
+  - id: 1
+    text: "Overall, the increased use of artificial intelligence (AI) in daily life makes you feel ______."
+    choices:
+      a: "More concerned than excited"
+      b: "Equally concerned and excited"
+      c: "More excited than concerned"
+
+  - id: 2
+    text: "You have a ______ trust in the United States to regulate the use of artificial intelligence (AI) effectively."
+    choices:
+      a: "Not too much/None at all"
+      b: "A lot/Some"
