@@ -8,6 +8,7 @@ schema:
   ethnicity: ["hispanic","white","black","asian","native american/pacific islander","other"]
   orientation: ["straight","gay","bi","other"]
   party: ["republican","democrat","independent","other"]
+  party_strength: ["strong","not_strong","lean"]
 
 marginals:
   age:
@@ -35,6 +36,12 @@ marginals:
     democrat: 0.27
     independent: 0.45
     other: 0.01
+  # strong: loyal partisan; not_strong: registered but cross-pressured; lean: independent who leans
+  # Population-weighted from party_strength|party conditionals below
+  party_strength:
+    strong: 0.21
+    not_strong: 0.38
+    lean: 0.41
 
 conditionals:
   age|gender:
@@ -67,13 +74,15 @@ conditionals:
       white: 0.57
       black: 0.12
       asian: 0.07
-      other: 0.05
+      "native american/pacific islander": 0.01
+      other: 0.04
     female:
       hispanic: 0.19
       white: 0.58
       black: 0.12
       asian: 0.07
-      other: 0.04
+      "native american/pacific islander": 0.01
+      other: 0.03
 
   party|age:
     "18-29":
@@ -139,6 +148,11 @@ conditionals:
       straight: 0.93
       gay: 0.02
       bi: 0.04
+      other: 0.01
+    "native american/pacific islander":
+      straight: 0.91
+      gay: 0.03
+      bi: 0.05
       other: 0.01
     other:
       straight: 0.91
@@ -223,6 +237,11 @@ conditionals:
       democrat: 0.63
       independent: 0.00
       other: 0.01
+    "native american/pacific islander":
+      republican: 0.28
+      democrat: 0.58
+      independent: 0.12
+      other: 0.02
     other:
       republican: 0.30
       democrat: 0.60
@@ -274,6 +293,17 @@ conditionals:
         democrat: 0.64
         independent: 0.00
         other: 0.01
+    "native american/pacific islander":
+      male:
+        republican: 0.30
+        democrat: 0.56
+        independent: 0.12
+        other: 0.02
+      female:
+        republican: 0.26
+        democrat: 0.60
+        independent: 0.12
+        other: 0.02
     other:
       male:
         republican: 0.32
@@ -331,4 +361,254 @@ conditionals:
         democrat: 0.35
         independent: 0.24
         other: 0.03
-  
+
+  # Gender ratio shifts with age: women are a larger share of older cohorts due to longer life expectancy
+  gender|age:
+    "18-29":
+      male: 0.51
+      female: 0.49
+    "30-44":
+      male: 0.50
+      female: 0.50
+    "45-64":
+      male: 0.49
+      female: 0.51
+    "65+":
+      male: 0.44
+      female: 0.56
+
+  # Age distribution within each ethnic group — Hispanic and Black populations skew younger
+  age|ethnicity:
+    hispanic:
+      "18-29": 0.27
+      "30-44": 0.30
+      "45-64": 0.27
+      "65+": 0.16
+    white:
+      "18-29": 0.15
+      "30-44": 0.22
+      "45-64": 0.34
+      "65+": 0.29
+    black:
+      "18-29": 0.22
+      "30-44": 0.28
+      "45-64": 0.30
+      "65+": 0.20
+    asian:
+      "18-29": 0.21
+      "30-44": 0.32
+      "45-64": 0.31
+      "65+": 0.16
+    "native american/pacific islander":
+      "18-29": 0.25
+      "30-44": 0.28
+      "45-64": 0.30
+      "65+": 0.17
+    other:
+      "18-29": 0.26
+      "30-44": 0.30
+      "45-64": 0.28
+      "65+": 0.16
+
+  # Ethnic composition within each age cohort — younger cohorts are more racially diverse
+  ethnicity|age:
+    "18-29":
+      hispanic: 0.22
+      white: 0.53
+      black: 0.13
+      asian: 0.08
+      "native american/pacific islander": 0.01
+      other: 0.03
+    "30-44":
+      hispanic: 0.21
+      white: 0.55
+      black: 0.12
+      asian: 0.09
+      "native american/pacific islander": 0.01
+      other: 0.02
+    "45-64":
+      hispanic: 0.16
+      white: 0.63
+      black: 0.12
+      asian: 0.07
+      "native american/pacific islander": 0.01
+      other: 0.01
+    "65+":
+      hispanic: 0.10
+      white: 0.77
+      black: 0.09
+      asian: 0.03
+      "native american/pacific islander": 0.005
+      other: 0.005
+
+  # Party affiliation by sexual orientation (direct single-level conditional)
+  party|orientation:
+    straight:
+      republican: 0.30
+      democrat: 0.33
+      independent: 0.36
+      other: 0.01
+    gay:
+      republican: 0.14
+      democrat: 0.75
+      independent: 0.10
+      other: 0.01
+    bi:
+      republican: 0.12
+      democrat: 0.74
+      independent: 0.13
+      other: 0.01
+    other:
+      republican: 0.10
+      democrat: 0.72
+      independent: 0.16
+      other: 0.02
+
+  # Party affiliation by age and ethnicity — captures generational shifts within ethnic groups
+  party|age,ethnicity:
+    "18-29":
+      white:
+        republican: 0.32
+        democrat: 0.35
+        independent: 0.30
+        other: 0.03
+      black:
+        republican: 0.10
+        democrat: 0.80
+        independent: 0.08
+        other: 0.02
+      hispanic:
+        republican: 0.28
+        democrat: 0.45
+        independent: 0.24
+        other: 0.03
+      asian:
+        republican: 0.22
+        democrat: 0.58
+        independent: 0.17
+        other: 0.03
+      "native american/pacific islander":
+        republican: 0.20
+        democrat: 0.55
+        independent: 0.22
+        other: 0.03
+      other:
+        republican: 0.20
+        democrat: 0.52
+        independent: 0.25
+        other: 0.03
+    "30-44":
+      white:
+        republican: 0.36
+        democrat: 0.35
+        independent: 0.26
+        other: 0.03
+      black:
+        republican: 0.12
+        democrat: 0.82
+        independent: 0.05
+        other: 0.01
+      hispanic:
+        republican: 0.32
+        democrat: 0.55
+        independent: 0.11
+        other: 0.02
+      asian:
+        republican: 0.30
+        democrat: 0.60
+        independent: 0.09
+        other: 0.01
+      "native american/pacific islander":
+        republican: 0.24
+        democrat: 0.56
+        independent: 0.18
+        other: 0.02
+      other:
+        republican: 0.24
+        democrat: 0.58
+        independent: 0.16
+        other: 0.02
+    "45-64":
+      white:
+        republican: 0.44
+        democrat: 0.33
+        independent: 0.20
+        other: 0.03
+      black:
+        republican: 0.14
+        democrat: 0.82
+        independent: 0.03
+        other: 0.01
+      hispanic:
+        republican: 0.38
+        democrat: 0.57
+        independent: 0.04
+        other: 0.01
+      asian:
+        republican: 0.38
+        democrat: 0.58
+        independent: 0.03
+        other: 0.01
+      "native american/pacific islander":
+        republican: 0.28
+        democrat: 0.58
+        independent: 0.12
+        other: 0.02
+      other:
+        republican: 0.28
+        democrat: 0.58
+        independent: 0.12
+        other: 0.02
+    "65+":
+      white:
+        republican: 0.50
+        democrat: 0.34
+        independent: 0.14
+        other: 0.02
+      black:
+        republican: 0.12
+        democrat: 0.84
+        independent: 0.03
+        other: 0.01
+      hispanic:
+        republican: 0.36
+        democrat: 0.59
+        independent: 0.04
+        other: 0.01
+      asian:
+        republican: 0.38
+        democrat: 0.60
+        independent: 0.01
+        other: 0.01
+      "native american/pacific islander":
+        republican: 0.28
+        democrat: 0.60
+        independent: 0.10
+        other: 0.02
+      other:
+        republican: 0.26
+        democrat: 0.62
+        independent: 0.10
+        other: 0.02
+
+  # Party strength by party affiliation
+  # strong: votes in every primary, highly consistent views
+  # not_strong: registered partisan but cross-pressured on some issues
+  # lean: self-described independent who leans toward this party; most heterodox
+  party_strength|party:
+    republican:
+      strong: 0.35
+      not_strong: 0.45
+      lean: 0.20
+    democrat:
+      strong: 0.35
+      not_strong: 0.45
+      lean: 0.20
+    independent:
+      strong: 0.05
+      not_strong: 0.30
+      lean: 0.65
+    other:
+      strong: 0.10
+      not_strong: 0.30
+      lean: 0.60

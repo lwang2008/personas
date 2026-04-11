@@ -1,0 +1,681 @@
+total:
+  source: >
+    Distributions estimated from Gallup, Pew Research Center, and PRRI polling data (2023-2025).
+    Conditionals reflect group-level polling averages; individual scores are sampled
+    from within the indicated bucket range in main.py.
+  notes: >
+    Each issue is scored on a spectrum from -1.0 (strongly oppose) to +1.0 (strongly support).
+    Bucket ranges are defined in score_buckets. Conditionals are keyed by demographic attribute
+    then demographic value; any attribute without a conditional falls back to the marginal.
+    Orientation values must match demographics.yaml schema: straight, gay, bi, other.
+
+score_buckets:
+  strongly_support: [0.60, 1.00]
+  support:          [0.20, 0.60]
+  neutral:          [-0.20, 0.20]
+  oppose:           [-0.60, -0.20]
+  strongly_oppose:  [-1.00, -0.60]
+
+issues:
+
+  abortion_rights:
+    label: "Abortion Rights"
+    description: "Abortion access should be legal and protected"
+    marginal:
+      strongly_support: 0.29
+      support:          0.22
+      neutral:          0.13
+      oppose:           0.18
+      strongly_oppose:  0.18
+    conditionals:
+      party:
+        democrat:
+          strongly_support: 0.55
+          support:          0.22
+          neutral:          0.10
+          oppose:           0.08
+          strongly_oppose:  0.05
+        republican:
+          strongly_support: 0.07
+          support:          0.11
+          neutral:          0.14
+          oppose:           0.24
+          strongly_oppose:  0.44
+        independent:
+          strongly_support: 0.30
+          support:          0.25
+          neutral:          0.18
+          oppose:           0.15
+          strongly_oppose:  0.12
+        other:
+          strongly_support: 0.34
+          support:          0.22
+          neutral:          0.18
+          oppose:           0.14
+          strongly_oppose:  0.12
+      gender:
+        female:
+          strongly_support: 0.35
+          support:          0.24
+          neutral:          0.13
+          oppose:           0.15
+          strongly_oppose:  0.13
+        male:
+          strongly_support: 0.22
+          support:          0.21
+          neutral:          0.16
+          oppose:           0.21
+          strongly_oppose:  0.20
+      age:
+        "18-29":
+          strongly_support: 0.40
+          support:          0.25
+          neutral:          0.13
+          oppose:           0.13
+          strongly_oppose:  0.09
+        "30-44":
+          strongly_support: 0.32
+          support:          0.24
+          neutral:          0.14
+          oppose:           0.17
+          strongly_oppose:  0.13
+        "45-64":
+          strongly_support: 0.25
+          support:          0.22
+          neutral:          0.15
+          oppose:           0.20
+          strongly_oppose:  0.18
+        "65+":
+          strongly_support: 0.20
+          support:          0.20
+          neutral:          0.15
+          oppose:           0.23
+          strongly_oppose:  0.22
+
+  gun_rights:
+    label: "Gun Rights"
+    description: "The right to own firearms should be broadly protected with minimal government restriction"
+    marginal:
+      strongly_support: 0.22
+      support:          0.22
+      neutral:          0.18
+      oppose:           0.22
+      strongly_oppose:  0.16
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.50
+          support:          0.28
+          neutral:          0.12
+          oppose:           0.07
+          strongly_oppose:  0.03
+        democrat:
+          strongly_support: 0.05
+          support:          0.10
+          neutral:          0.15
+          oppose:           0.30
+          strongly_oppose:  0.40
+        independent:
+          strongly_support: 0.21
+          support:          0.23
+          neutral:          0.21
+          oppose:           0.22
+          strongly_oppose:  0.13
+        other:
+          strongly_support: 0.18
+          support:          0.21
+          neutral:          0.22
+          oppose:           0.22
+          strongly_oppose:  0.17
+      gender:
+        male:
+          strongly_support: 0.32
+          support:          0.28
+          neutral:          0.18
+          oppose:           0.14
+          strongly_oppose:  0.08
+        female:
+          strongly_support: 0.12
+          support:          0.16
+          neutral:          0.20
+          oppose:           0.28
+          strongly_oppose:  0.24
+      ethnicity:
+        white:
+          strongly_support: 0.28
+          support:          0.26
+          neutral:          0.18
+          oppose:           0.17
+          strongly_oppose:  0.11
+        black:
+          strongly_support: 0.08
+          support:          0.12
+          neutral:          0.17
+          oppose:           0.30
+          strongly_oppose:  0.33
+        hispanic:
+          strongly_support: 0.14
+          support:          0.18
+          neutral:          0.21
+          oppose:           0.26
+          strongly_oppose:  0.21
+        asian:
+          strongly_support: 0.10
+          support:          0.15
+          neutral:          0.21
+          oppose:           0.28
+          strongly_oppose:  0.26
+        "native american/pacific islander":
+          strongly_support: 0.16
+          support:          0.18
+          neutral:          0.22
+          oppose:           0.24
+          strongly_oppose:  0.20
+        other:
+          strongly_support: 0.14
+          support:          0.17
+          neutral:          0.22
+          oppose:           0.25
+          strongly_oppose:  0.22
+
+  lgbtq_rights:
+    label: "LGBTQ+ Rights"
+    description: "LGBTQ+ people should have full legal equality and explicit anti-discrimination protection"
+    marginal:
+      strongly_support: 0.40
+      support:          0.24
+      neutral:          0.14
+      oppose:           0.12
+      strongly_oppose:  0.10
+    conditionals:
+      party:
+        democrat:
+          strongly_support: 0.65
+          support:          0.22
+          neutral:          0.08
+          oppose:           0.03
+          strongly_oppose:  0.02
+        republican:
+          strongly_support: 0.14
+          support:          0.20
+          neutral:          0.20
+          oppose:           0.24
+          strongly_oppose:  0.22
+        independent:
+          strongly_support: 0.42
+          support:          0.26
+          neutral:          0.16
+          oppose:           0.10
+          strongly_oppose:  0.06
+        other:
+          strongly_support: 0.46
+          support:          0.25
+          neutral:          0.14
+          oppose:           0.09
+          strongly_oppose:  0.06
+      orientation:
+        gay:
+          strongly_support: 0.85
+          support:          0.10
+          neutral:          0.03
+          oppose:           0.01
+          strongly_oppose:  0.01
+        bi:
+          strongly_support: 0.80
+          support:          0.12
+          neutral:          0.04
+          oppose:           0.02
+          strongly_oppose:  0.02
+        straight:
+          strongly_support: 0.35
+          support:          0.25
+          neutral:          0.16
+          oppose:           0.13
+          strongly_oppose:  0.11
+        other:
+          strongly_support: 0.75
+          support:          0.14
+          neutral:          0.06
+          oppose:           0.03
+          strongly_oppose:  0.02
+      age:
+        "18-29":
+          strongly_support: 0.56
+          support:          0.24
+          neutral:          0.10
+          oppose:           0.06
+          strongly_oppose:  0.04
+        "30-44":
+          strongly_support: 0.46
+          support:          0.25
+          neutral:          0.14
+          oppose:           0.09
+          strongly_oppose:  0.06
+        "45-64":
+          strongly_support: 0.35
+          support:          0.24
+          neutral:          0.17
+          oppose:           0.14
+          strongly_oppose:  0.10
+        "65+":
+          strongly_support: 0.25
+          support:          0.22
+          neutral:          0.18
+          oppose:           0.18
+          strongly_oppose:  0.17
+
+  free_speech:
+    label: "Free Speech"
+    description: "Freedom of expression should be broadly protected, even for controversial or offensive views"
+    marginal:
+      strongly_support: 0.38
+      support:          0.28
+      neutral:          0.16
+      oppose:           0.12
+      strongly_oppose:  0.06
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.50
+          support:          0.28
+          neutral:          0.12
+          oppose:           0.07
+          strongly_oppose:  0.03
+        democrat:
+          strongly_support: 0.26
+          support:          0.28
+          neutral:          0.22
+          oppose:           0.16
+          strongly_oppose:  0.08
+        independent:
+          strongly_support: 0.40
+          support:          0.29
+          neutral:          0.17
+          oppose:           0.10
+          strongly_oppose:  0.04
+        other:
+          strongly_support: 0.37
+          support:          0.28
+          neutral:          0.18
+          oppose:           0.12
+          strongly_oppose:  0.05
+      age:
+        "18-29":
+          strongly_support: 0.28
+          support:          0.28
+          neutral:          0.22
+          oppose:           0.16
+          strongly_oppose:  0.06
+        "30-44":
+          strongly_support: 0.35
+          support:          0.28
+          neutral:          0.18
+          oppose:           0.13
+          strongly_oppose:  0.06
+        "45-64":
+          strongly_support: 0.42
+          support:          0.28
+          neutral:          0.15
+          oppose:           0.10
+          strongly_oppose:  0.05
+        "65+":
+          strongly_support: 0.46
+          support:          0.27
+          neutral:          0.14
+          oppose:           0.09
+          strongly_oppose:  0.04
+
+  nationalism:
+    label: "Nationalism"
+    description: "America's national interests should always come first, even over international cooperation"
+    marginal:
+      strongly_support: 0.26
+      support:          0.24
+      neutral:          0.22
+      oppose:           0.18
+      strongly_oppose:  0.10
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.52
+          support:          0.28
+          neutral:          0.12
+          oppose:           0.06
+          strongly_oppose:  0.02
+        democrat:
+          strongly_support: 0.07
+          support:          0.16
+          neutral:          0.24
+          oppose:           0.30
+          strongly_oppose:  0.23
+        independent:
+          strongly_support: 0.24
+          support:          0.26
+          neutral:          0.26
+          oppose:           0.16
+          strongly_oppose:  0.08
+        other:
+          strongly_support: 0.20
+          support:          0.24
+          neutral:          0.28
+          oppose:           0.18
+          strongly_oppose:  0.10
+      age:
+        "18-29":
+          strongly_support: 0.18
+          support:          0.22
+          neutral:          0.26
+          oppose:           0.22
+          strongly_oppose:  0.12
+        "30-44":
+          strongly_support: 0.24
+          support:          0.24
+          neutral:          0.24
+          oppose:           0.18
+          strongly_oppose:  0.10
+        "45-64":
+          strongly_support: 0.30
+          support:          0.26
+          neutral:          0.22
+          oppose:           0.14
+          strongly_oppose:  0.08
+        "65+":
+          strongly_support: 0.36
+          support:          0.28
+          neutral:          0.18
+          oppose:           0.12
+          strongly_oppose:  0.06
+      ethnicity:
+        white:
+          strongly_support: 0.32
+          support:          0.26
+          neutral:          0.22
+          oppose:           0.13
+          strongly_oppose:  0.07
+        black:
+          strongly_support: 0.16
+          support:          0.20
+          neutral:          0.26
+          oppose:           0.24
+          strongly_oppose:  0.14
+        hispanic:
+          strongly_support: 0.20
+          support:          0.24
+          neutral:          0.26
+          oppose:           0.20
+          strongly_oppose:  0.10
+        asian:
+          strongly_support: 0.14
+          support:          0.22
+          neutral:          0.28
+          oppose:           0.24
+          strongly_oppose:  0.12
+        "native american/pacific islander":
+          strongly_support: 0.18
+          support:          0.22
+          neutral:          0.28
+          oppose:           0.20
+          strongly_oppose:  0.12
+        other:
+          strongly_support: 0.18
+          support:          0.22
+          neutral:          0.28
+          oppose:           0.20
+          strongly_oppose:  0.12
+
+  religious_freedom:
+    label: "Religious Freedom"
+    description: "Religious institutions and individuals should be exempt from laws that conflict with sincerely held faith"
+    marginal:
+      strongly_support: 0.28
+      support:          0.22
+      neutral:          0.20
+      oppose:           0.18
+      strongly_oppose:  0.12
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.50
+          support:          0.26
+          neutral:          0.14
+          oppose:           0.07
+          strongly_oppose:  0.03
+        democrat:
+          strongly_support: 0.11
+          support:          0.18
+          neutral:          0.23
+          oppose:           0.26
+          strongly_oppose:  0.22
+        independent:
+          strongly_support: 0.26
+          support:          0.22
+          neutral:          0.24
+          oppose:           0.17
+          strongly_oppose:  0.11
+        other:
+          strongly_support: 0.22
+          support:          0.22
+          neutral:          0.26
+          oppose:           0.18
+          strongly_oppose:  0.12
+      ethnicity:
+        white:
+          strongly_support: 0.28
+          support:          0.24
+          neutral:          0.21
+          oppose:           0.17
+          strongly_oppose:  0.10
+        black:
+          strongly_support: 0.40
+          support:          0.26
+          neutral:          0.18
+          oppose:           0.11
+          strongly_oppose:  0.05
+        hispanic:
+          strongly_support: 0.36
+          support:          0.26
+          neutral:          0.18
+          oppose:           0.13
+          strongly_oppose:  0.07
+        asian:
+          strongly_support: 0.22
+          support:          0.22
+          neutral:          0.26
+          oppose:           0.19
+          strongly_oppose:  0.11
+        "native american/pacific islander":
+          strongly_support: 0.30
+          support:          0.24
+          neutral:          0.22
+          oppose:           0.15
+          strongly_oppose:  0.09
+        other:
+          strongly_support: 0.24
+          support:          0.22
+          neutral:          0.26
+          oppose:           0.17
+          strongly_oppose:  0.11
+
+  immigration_restriction:
+    label: "Immigration Restriction"
+    description: "Immigration to the U.S. should be significantly reduced and more strictly controlled"
+    marginal:
+      strongly_support: 0.26
+      support:          0.24
+      neutral:          0.18
+      oppose:           0.20
+      strongly_oppose:  0.12
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.56
+          support:          0.26
+          neutral:          0.10
+          oppose:           0.06
+          strongly_oppose:  0.02
+        democrat:
+          strongly_support: 0.06
+          support:          0.12
+          neutral:          0.18
+          oppose:           0.34
+          strongly_oppose:  0.30
+        independent:
+          strongly_support: 0.24
+          support:          0.26
+          neutral:          0.22
+          oppose:           0.18
+          strongly_oppose:  0.10
+        other:
+          strongly_support: 0.18
+          support:          0.22
+          neutral:          0.26
+          oppose:           0.22
+          strongly_oppose:  0.12
+      ethnicity:
+        white:
+          strongly_support: 0.34
+          support:          0.26
+          neutral:          0.18
+          oppose:           0.14
+          strongly_oppose:  0.08
+        black:
+          strongly_support: 0.20
+          support:          0.24
+          neutral:          0.24
+          oppose:           0.20
+          strongly_oppose:  0.12
+        hispanic:
+          strongly_support: 0.12
+          support:          0.18
+          neutral:          0.22
+          oppose:           0.28
+          strongly_oppose:  0.20
+        asian:
+          strongly_support: 0.14
+          support:          0.20
+          neutral:          0.22
+          oppose:           0.26
+          strongly_oppose:  0.18
+        "native american/pacific islander":
+          strongly_support: 0.18
+          support:          0.22
+          neutral:          0.24
+          oppose:           0.22
+          strongly_oppose:  0.14
+        other:
+          strongly_support: 0.16
+          support:          0.20
+          neutral:          0.26
+          oppose:           0.24
+          strongly_oppose:  0.14
+      age:
+        "18-29":
+          strongly_support: 0.14
+          support:          0.20
+          neutral:          0.24
+          oppose:           0.26
+          strongly_oppose:  0.16
+        "30-44":
+          strongly_support: 0.22
+          support:          0.24
+          neutral:          0.22
+          oppose:           0.22
+          strongly_oppose:  0.10
+        "45-64":
+          strongly_support: 0.30
+          support:          0.26
+          neutral:          0.18
+          oppose:           0.17
+          strongly_oppose:  0.09
+        "65+":
+          strongly_support: 0.36
+          support:          0.26
+          neutral:          0.17
+          oppose:           0.14
+          strongly_oppose:  0.07
+
+  affirmative_action:
+    label: "Affirmative Action"
+    description: "Race- and gender-conscious policies are justified to address systemic inequality"
+    marginal:
+      strongly_support: 0.24
+      support:          0.22
+      neutral:          0.18
+      oppose:           0.20
+      strongly_oppose:  0.16
+    conditionals:
+      party:
+        democrat:
+          strongly_support: 0.46
+          support:          0.28
+          neutral:          0.14
+          oppose:           0.08
+          strongly_oppose:  0.04
+        republican:
+          strongly_support: 0.05
+          support:          0.10
+          neutral:          0.16
+          oppose:           0.30
+          strongly_oppose:  0.39
+        independent:
+          strongly_support: 0.22
+          support:          0.22
+          neutral:          0.24
+          oppose:           0.20
+          strongly_oppose:  0.12
+        other:
+          strongly_support: 0.24
+          support:          0.22
+          neutral:          0.22
+          oppose:           0.18
+          strongly_oppose:  0.14
+      ethnicity:
+        white:
+          strongly_support: 0.14
+          support:          0.20
+          neutral:          0.22
+          oppose:           0.24
+          strongly_oppose:  0.20
+        black:
+          strongly_support: 0.50
+          support:          0.26
+          neutral:          0.12
+          oppose:           0.08
+          strongly_oppose:  0.04
+        hispanic:
+          strongly_support: 0.36
+          support:          0.26
+          neutral:          0.18
+          oppose:           0.12
+          strongly_oppose:  0.08
+        asian:
+          strongly_support: 0.28
+          support:          0.24
+          neutral:          0.20
+          oppose:           0.16
+          strongly_oppose:  0.12
+        "native american/pacific islander":
+          strongly_support: 0.38
+          support:          0.26
+          neutral:          0.18
+          oppose:           0.12
+          strongly_oppose:  0.06
+        other:
+          strongly_support: 0.30
+          support:          0.24
+          neutral:          0.20
+          oppose:           0.16
+          strongly_oppose:  0.10
+      gender:
+        female:
+          strongly_support: 0.30
+          support:          0.24
+          neutral:          0.18
+          oppose:           0.16
+          strongly_oppose:  0.12
+        male:
+          strongly_support: 0.18
+          support:          0.20
+          neutral:          0.20
+          oppose:           0.24
+          strongly_oppose:  0.18

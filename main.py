@@ -1,9 +1,8 @@
 import argparse
 import json
-import math
 import random
+import sys
 from dataclasses import dataclass
-from itertools import product
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
 
@@ -21,6 +20,16 @@ def load_demographics(path: str = "data/demographics.yaml") -> Dict[str, Any]:
     file_path = Path(__file__).parent / path
     if not file_path.exists():
         raise FileNotFoundError(f"Demographics file not found at {file_path}")
+    if yaml is None:
+        raise RuntimeError("PyYAML is required. Install with: pip install pyyaml")
+    with file_path.open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def load_issues(path: str) -> Dict[str, Any]:
+    file_path = Path(__file__).parent / path
+    if not file_path.exists():
+        raise FileNotFoundError(f"Issues file not found at {file_path}")
     if yaml is None:
         raise RuntimeError("PyYAML is required. Install with: pip install pyyaml")
     with file_path.open("r", encoding="utf-8") as f:
@@ -48,6 +57,21 @@ def soft_product_distributions(d1: Dict[str, float], d2: Dict[str, float]) -> Di
         p1 = d1.get(k, 0.0)
         p2 = d2.get(k, 0.0)
         out[k] = p1 * p2 if (p1 > 0.0 and p2 > 0.0) else 0.0
+    return normalize(out)
+
+
+# How strongly each party_strength level pulls the party signal vs. the marginal.
+# alpha=1.0 → full party conditional; alpha→0 → flat/marginal (no party signal).
+_PARTY_STRENGTH_ALPHA = {"strong": 1.0, "not_strong": 0.55, "lean": 0.25}
+
+
+def attenuate_distribution(dist: Dict[str, float], alpha: float) -> Dict[str, float]:
+    """Raise each probability to power alpha then renormalize.
+
+    alpha=1.0 leaves the distribution unchanged.
+    alpha<1.0 flattens it toward uniform, reducing the signal strength.
+    """
+    out = {k: max(v, 1e-9) ** alpha for k, v in dist.items()}
     return normalize(out)
 
 
@@ -137,12 +161,66 @@ def combine_two_fixed_distributions(
     return per_attr
 
 # -----------------------
+# Issue scoring
+# -----------------------
+
+def score_issue(
+    demographics: Dict[str, str],
+    issue: Dict[str, Any],
+    score_buckets: Dict[str, List[float]],
+) -> float:
+    """
+    Sample a score in [-1.0, 1.0] for one issue given a persona's demographics.
+
+    Algorithm:
+      1. Start with the issue's marginal bucket distribution.
+      2. For each demographic attribute that has a conditional table in this issue,
+         retrieve P(bucket | attr=val) and combine with the running distribution
+         using product-of-experts (same pattern as soft_product_distributions).
+      3. Sample a bucket from the combined distribution.
+      4. Sample a float uniformly within that bucket's [lo, hi] range.
+    """
+    combined = normalize(dict(issue["marginal"]))
+    party_strength = demographics.get("party_strength", "strong")
+
+    for attr, val in demographics.items():
+        if attr == "party_strength":
+            continue
+        cond_tables = issue.get("conditionals", {})
+        if attr in cond_tables and val in cond_tables[attr]:
+            conditional_dist = normalize(dict(cond_tables[attr][val]))
+            if attr == "party":
+                alpha = _PARTY_STRENGTH_ALPHA.get(party_strength, 1.0)
+                conditional_dist = attenuate_distribution(conditional_dist, alpha)
+            combined = soft_product_distributions(combined, conditional_dist)
+
+    bucket = sample_from(combined)
+    lo, hi = score_buckets[bucket]
+    return round(random.uniform(lo, hi), 3)
+
+
+def assign_scores(
+    demographics: Dict[str, str],
+    issues_data: Dict[str, Any],
+) -> Dict[str, float]:
+    """Score every issue in an issues YAML file for one persona."""
+    score_buckets = issues_data["score_buckets"]
+    return {
+        key: score_issue(demographics, issue, score_buckets)
+        for key, issue in issues_data["issues"].items()
+    }
+
+
+# -----------------------
 # Persona generator
 # -----------------------
 
 @dataclass
 class Persona:
-    values: Dict[str, str]
+    id: str
+    demographics: Dict[str, str]
+    values: Dict[str, float]
+    wants: Dict[str, float]
 
 
 def sample_from(dist: Dict[str, float]) -> str:
@@ -161,6 +239,8 @@ def generate_personas(
     n: int,
     fixed1: Tuple[str, str] | None = None,
     fixed2: Tuple[str, str] | None = None,
+    values_data: Dict[str, Any] | None = None,
+    wants_data: Dict[str, Any] | None = None,
 ) -> List[Persona]:
     schema = data.get("schema", {})
     if fixed1:
@@ -192,7 +272,7 @@ def generate_personas(
             else:
                 per_attr[attr] = uniform_over(values)
 
-    for _ in range(n):
+    for i in range(n):
         vals: Dict[str, str] = {}
         # Assign fixed values first
         if fixed1:
@@ -207,13 +287,47 @@ def generate_personas(
                 dist = uniform_over(schema[attr])
             choice = sample_from(dist)
             vals[attr] = choice
-        personas.append(Persona(values=vals))
+        personas.append(Persona(
+            id=f"p{i + 1:04d}",
+            demographics=vals,
+            values=assign_scores(vals, values_data) if values_data else {},
+            wants=assign_scores(vals, wants_data) if wants_data else {},
+        ))
     return personas
 
 
 # -----------------------
-# CLI
+# Run file management
 # -----------------------
+
+RUNS_DIR    = Path(__file__).parent / "runs"
+RESULTS_DIR = Path(__file__).parent / "results"
+
+
+def list_results() -> List[Path]:
+    if not RESULTS_DIR.exists():
+        return []
+    return sorted(RESULTS_DIR.glob("*.jsonl"))
+
+
+def next_run_path() -> Path:
+    RUNS_DIR.mkdir(exist_ok=True)
+    existing = sorted(RUNS_DIR.glob("run_*.jsonl"))
+    nums = []
+    for p in existing:
+        try:
+            nums.append(int(p.stem.split("_")[1]))
+        except (IndexError, ValueError):
+            pass
+    n = max(nums, default=0) + 1
+    return RUNS_DIR / f"run_{n:03d}.jsonl"
+
+
+def list_runs() -> List[Path]:
+    if not RUNS_DIR.exists():
+        return []
+    return sorted(RUNS_DIR.glob("run_*.jsonl"))
+
 
 def parse_fix_arg(s: str) -> Tuple[str, str]:
     if "=" not in s:
@@ -229,17 +343,33 @@ def main():
     # Generate personas
     g = sub.add_parser("generate", help="Generate personas with one or two fixed attributes")
     g.add_argument("--data", default="data/demographics.yaml")
+    g.add_argument("--values", default="data/values.yaml", help="Path to values issues YAML")
+    g.add_argument("--wants", default="data/wants.yaml", help="Path to wants issues YAML")
     g.add_argument("-n", type=int, default=10, help="Number of personas")
     g.add_argument("--fix", type=parse_fix_arg, help="Fixed attr=value")
     g.add_argument("--fix2", type=parse_fix_arg, help="Second fixed attr=value")
     g.add_argument("--seed", type=int, default=None, help="RNG seed (omit for non-deterministic runs)")
+    g.add_argument("--no-save", action="store_true", help="Print to stdout only, do not save a run file")
+    g.add_argument("--type", type=int, choices=[1, 2, 3], default=3,
+                   help="1=demographics only, 2=values/wants only (demographics hidden), 3=full (default)")
 
-    # Top-k combinations for a single fixed attribute (existing conceptually)
-    k = sub.add_parser("topk", help="Show top-k combinations given one fixed attribute")
-    k.add_argument("--data", default="data/demographics.yaml")
-    k.add_argument("--fixed", required=True, help="Fixed attribute name (e.g., gender)")
-    k.add_argument("--value", required=True, help="Fixed attribute value (e.g., male)")
-    k.add_argument("--top", type=int, default=20, help="Show top-k combinations")
+    # List saved runs
+    sub.add_parser("list", help="List saved persona runs")
+
+    # Clear saved runs
+    cl = sub.add_parser("clear", help="Delete saved run file(s)")
+    cl.add_argument("run", nargs="?", help="Run name to delete, e.g. run_001 (omit with --all to delete everything)")
+    cl.add_argument("--all", action="store_true", help="Delete all saved runs")
+
+    # List result files
+    sub.add_parser("list-results", help="List saved survey result files")
+
+    # Clear result files
+    cr = sub.add_parser("clear-results", help="Delete survey result file(s)")
+    cr.add_argument("result", nargs="*",
+                    help="Result filename(s) to delete, e.g. run_001_immigration_survey_results "
+                         "(omit with --all to delete everything)")
+    cr.add_argument("--all", action="store_true", help="Delete all result files")
 
     args = parser.parse_args()
 
@@ -247,35 +377,87 @@ def main():
         if args.seed is not None:
             random.seed(args.seed)
         data = load_demographics(args.data)
+        values_data = load_issues(args.values) if args.type in (2, 3) else None
+        wants_data  = load_issues(args.wants)  if args.type in (2, 3) else None
         personas = generate_personas(
             data=data,
             n=args.n,
             fixed1=args.fix,
             fixed2=args.fix2,
+            values_data=values_data,
+            wants_data=wants_data,
         )
+        lines = []
         for p in personas:
-            print(json.dumps(p.values))
+            if args.type == 1:
+                record = {"id": p.id, "demographics": p.demographics}
+            elif args.type == 2:
+                record = {"id": p.id, "values": p.values, "wants": p.wants}
+            else:
+                record = {"id": p.id, "demographics": p.demographics, "values": p.values, "wants": p.wants}
+            lines.append(json.dumps(record))
+        for line in lines:
+            print(line)
+        if not args.no_save:
+            run_path = next_run_path()
+            run_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+            print(f"saved {len(personas)} personas → {run_path}", file=sys.stderr)
         return
 
-    if args.cmd == "topk":
-        data = load_demographics(args.data)
-        schema = data["schema"]
-        if args.fixed not in schema:
-            raise ValueError(f"Unknown fixed attribute '{args.fixed}'. Available: {list(schema.keys())}")
-        if args.value not in schema[args.fixed]:
-            raise ValueError(f"Unknown value '{args.value}' for {args.fixed}. Available: {schema[args.fixed]}")
+    if args.cmd == "list":
+        runs = list_runs()
+        if not runs:
+            print("no saved runs")
+        for path in runs:
+            count = sum(1 for line in path.read_text(encoding="utf-8").splitlines() if line.strip())
+            print(f"{path.name}  ({count} personas)")
+        return
 
-        conditionals = build_conditionals_from_yaml(data, fixed_param=args.fixed)
-        dist = compute_conditional_distribution(
-            fixed_param_name=args.fixed,
-            fixed_param_value=args.value,
-            schema=schema,
-            conditionals=conditionals,
-        )
-        items = sorted(dist.items(), key=lambda kv: kv[1], reverse=True)[: args.top]
-        for combo, p in items:
-            combo_str = ", ".join([f"{a}={v}" for a, v in combo])
-            print(f"{p:.6f}  {combo_str}")
+    if args.cmd == "clear":
+        if args.all:
+            runs = list_runs()
+            for path in runs:
+                path.unlink()
+            print(f"deleted {len(runs)} run(s)")
+        elif args.run:
+            name = args.run if args.run.endswith(".jsonl") else args.run + ".jsonl"
+            path = RUNS_DIR / name
+            if not path.exists():
+                print(f"not found: {path}")
+            else:
+                path.unlink()
+                print(f"deleted {path.name}")
+        else:
+            print("specify a run name (e.g. run_001) or use --all")
+        return
+
+    if args.cmd == "list-results":
+        results = list_results()
+        if not results:
+            print("no saved results")
+        for path in results:
+            count = sum(1 for line in path.read_text(encoding="utf-8").splitlines() if line.strip())
+            print(f"{path.name}  ({count} records)")
+        return
+
+    if args.cmd == "clear-results":
+        if args.all:
+            results = list_results()
+            images  = sorted(RESULTS_DIR.glob("*.png")) if RESULTS_DIR.exists() else []
+            for path in results + images:
+                path.unlink()
+            print(f"deleted {len(results)} result file(s) and {len(images)} image(s)")
+        elif args.result:
+            for name in args.result:
+                name = name if name.endswith(".jsonl") else name + ".jsonl"
+                path = RESULTS_DIR / name
+                if not path.exists():
+                    print(f"not found: {path.name}")
+                else:
+                    path.unlink()
+                    print(f"deleted {path.name}")
+        else:
+            print("specify result filename(s) or use --all")
         return
 
     parser.print_help()

@@ -1,0 +1,59 @@
+title: "How Americans See Immigration Officers' Behaviors and Civilian Actions"
+source: "Pew Research Center"
+
+questions:
+  - id: 1
+    text: "It is ______ to record video of immigration officers while they make arrests."
+    choices:
+      a: "definitely unacceptable"
+      b: "probably unacceptable"
+      c: "probably acceptable"
+      d: "definitely acceptable"
+
+  - id: 2
+    text: "It is ______ for people to share information about where immigration officers are arresting people."
+    choices:
+      a: "definitely unacceptable"
+      b: "probably unacceptable"
+      c: "probably acceptable"
+      d: "definitely acceptable"
+
+  - id: 3
+    text: "It is ______ for people to report people they think may be in the country illegally to immigration officers."
+    choices:
+      a: "definitely unacceptable"
+      b: "probably unacceptable"
+      c: "probably acceptable"
+      d: "definitely acceptable"
+
+  - id: 4
+    text: "It is ______ for federal immigration officers to arrest U.S. citizens who help people avoid immigration officers."
+    choices:
+      a: "definitely unacceptable"
+      b: "probably unacceptable"
+      c: "probably acceptable"
+      d: "definitely acceptable"
+
+  - id: 5
+    text: "It is ______ for federal immigration officers to increase their presence in neighborhoods with many immigrants."
+    choices:
+      a: "definitely unacceptable"
+      b: "probably unacceptable"
+      c: "probably acceptable"
+      d: "definitely acceptable"
+
+  - id: 6
+    text: "It is ______ for federal immigration officers to wear face coverings that hide their identities while working."
+    choices:
+      a: "definitely unacceptable"
+      b: "probably unacceptable"
+      c: "probably acceptable"
+      d: "definitely acceptable"
+
+  - id: 7
+    text: "It is ______ for federal immigration officers to use a person's looks or the language they speak as a reason to check their immigration status."
+    choices:
+      a: "definitely unacceptable"
+      b: "probably unacceptable"
+      c: "probably acceptable"
+      d: "definitely acceptable"

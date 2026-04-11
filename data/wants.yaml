@@ -1,0 +1,667 @@
+total:
+  source: >
+    Distributions estimated from Gallup, Pew Research Center, Kaiser Family Foundation,
+    and YouGov polling data (2023-2025).
+    Conditionals reflect group-level polling averages; individual scores are sampled
+    from within the indicated bucket range in main.py.
+  notes: >
+    Each issue is scored on a spectrum from -1.0 (strongly oppose) to +1.0 (strongly support).
+    Bucket ranges are defined in score_buckets. Conditionals are keyed by demographic attribute
+    then demographic value; any attribute without a conditional falls back to the marginal.
+    Orientation values must match demographics.yaml schema: straight, gay, bi, other.
+
+score_buckets:
+  strongly_support: [0.60, 1.00]
+  support:          [0.20, 0.60]
+  neutral:          [-0.20, 0.20]
+  oppose:           [-0.60, -0.20]
+  strongly_oppose:  [-1.00, -0.60]
+
+issues:
+
+  student_debt_relief:
+    label: "Student Debt Relief"
+    description: "The government should cancel or significantly reduce student loan debt"
+    marginal:
+      strongly_support: 0.28
+      support:          0.22
+      neutral:          0.18
+      oppose:           0.18
+      strongly_oppose:  0.14
+    conditionals:
+      age:
+        "18-29":
+          strongly_support: 0.52
+          support:          0.24
+          neutral:          0.12
+          oppose:           0.08
+          strongly_oppose:  0.04
+        "30-44":
+          strongly_support: 0.38
+          support:          0.26
+          neutral:          0.16
+          oppose:           0.13
+          strongly_oppose:  0.07
+        "45-64":
+          strongly_support: 0.20
+          support:          0.20
+          neutral:          0.22
+          oppose:           0.22
+          strongly_oppose:  0.16
+        "65+":
+          strongly_support: 0.11
+          support:          0.15
+          neutral:          0.22
+          oppose:           0.28
+          strongly_oppose:  0.24
+      party:
+        democrat:
+          strongly_support: 0.46
+          support:          0.26
+          neutral:          0.14
+          oppose:           0.10
+          strongly_oppose:  0.04
+        republican:
+          strongly_support: 0.08
+          support:          0.12
+          neutral:          0.18
+          oppose:           0.28
+          strongly_oppose:  0.34
+        independent:
+          strongly_support: 0.26
+          support:          0.24
+          neutral:          0.22
+          oppose:           0.18
+          strongly_oppose:  0.10
+        other:
+          strongly_support: 0.28
+          support:          0.24
+          neutral:          0.20
+          oppose:           0.16
+          strongly_oppose:  0.12
+
+  universal_healthcare:
+    label: "Universal Healthcare"
+    description: "The government should provide healthcare coverage to all citizens"
+    marginal:
+      strongly_support: 0.36
+      support:          0.24
+      neutral:          0.14
+      oppose:           0.14
+      strongly_oppose:  0.12
+    conditionals:
+      party:
+        democrat:
+          strongly_support: 0.62
+          support:          0.22
+          neutral:          0.08
+          oppose:           0.05
+          strongly_oppose:  0.03
+        republican:
+          strongly_support: 0.08
+          support:          0.12
+          neutral:          0.16
+          oppose:           0.28
+          strongly_oppose:  0.36
+        independent:
+          strongly_support: 0.35
+          support:          0.26
+          neutral:          0.18
+          oppose:           0.13
+          strongly_oppose:  0.08
+        other:
+          strongly_support: 0.38
+          support:          0.24
+          neutral:          0.16
+          oppose:           0.12
+          strongly_oppose:  0.10
+      age:
+        "18-29":
+          strongly_support: 0.47
+          support:          0.26
+          neutral:          0.14
+          oppose:           0.09
+          strongly_oppose:  0.04
+        "30-44":
+          strongly_support: 0.40
+          support:          0.25
+          neutral:          0.16
+          oppose:           0.12
+          strongly_oppose:  0.07
+        "45-64":
+          strongly_support: 0.33
+          support:          0.24
+          neutral:          0.17
+          oppose:           0.15
+          strongly_oppose:  0.11
+        "65+":
+          strongly_support: 0.28
+          support:          0.22
+          neutral:          0.17
+          oppose:           0.18
+          strongly_oppose:  0.15
+
+  public_safety_spending:
+    label: "Public Safety Spending"
+    description: "Government should increase funding for police and public safety services"
+    marginal:
+      strongly_support: 0.28
+      support:          0.28
+      neutral:          0.20
+      oppose:           0.14
+      strongly_oppose:  0.10
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.52
+          support:          0.30
+          neutral:          0.11
+          oppose:           0.05
+          strongly_oppose:  0.02
+        democrat:
+          strongly_support: 0.11
+          support:          0.24
+          neutral:          0.28
+          oppose:           0.23
+          strongly_oppose:  0.14
+        independent:
+          strongly_support: 0.28
+          support:          0.30
+          neutral:          0.22
+          oppose:           0.13
+          strongly_oppose:  0.07
+        other:
+          strongly_support: 0.22
+          support:          0.28
+          neutral:          0.26
+          oppose:           0.14
+          strongly_oppose:  0.10
+      ethnicity:
+        white:
+          strongly_support: 0.34
+          support:          0.30
+          neutral:          0.20
+          oppose:           0.11
+          strongly_oppose:  0.05
+        black:
+          strongly_support: 0.18
+          support:          0.24
+          neutral:          0.26
+          oppose:           0.22
+          strongly_oppose:  0.10
+        hispanic:
+          strongly_support: 0.28
+          support:          0.28
+          neutral:          0.22
+          oppose:           0.14
+          strongly_oppose:  0.08
+        asian:
+          strongly_support: 0.24
+          support:          0.28
+          neutral:          0.24
+          oppose:           0.16
+          strongly_oppose:  0.08
+        "native american/pacific islander":
+          strongly_support: 0.22
+          support:          0.26
+          neutral:          0.26
+          oppose:           0.16
+          strongly_oppose:  0.10
+        other:
+          strongly_support: 0.22
+          support:          0.26
+          neutral:          0.26
+          oppose:           0.16
+          strongly_oppose:  0.10
+
+  climate_action:
+    label: "Climate Action"
+    description: "Government should take aggressive action to address climate change, including regulation and investment"
+    marginal:
+      strongly_support: 0.36
+      support:          0.24
+      neutral:          0.14
+      oppose:           0.14
+      strongly_oppose:  0.12
+    conditionals:
+      party:
+        democrat:
+          strongly_support: 0.65
+          support:          0.22
+          neutral:          0.08
+          oppose:           0.03
+          strongly_oppose:  0.02
+        republican:
+          strongly_support: 0.06
+          support:          0.10
+          neutral:          0.16
+          oppose:           0.28
+          strongly_oppose:  0.40
+        independent:
+          strongly_support: 0.34
+          support:          0.26
+          neutral:          0.19
+          oppose:           0.13
+          strongly_oppose:  0.08
+        other:
+          strongly_support: 0.38
+          support:          0.24
+          neutral:          0.16
+          oppose:           0.12
+          strongly_oppose:  0.10
+      age:
+        "18-29":
+          strongly_support: 0.54
+          support:          0.25
+          neutral:          0.11
+          oppose:           0.07
+          strongly_oppose:  0.03
+        "30-44":
+          strongly_support: 0.42
+          support:          0.26
+          neutral:          0.14
+          oppose:           0.11
+          strongly_oppose:  0.07
+        "45-64":
+          strongly_support: 0.31
+          support:          0.24
+          neutral:          0.17
+          oppose:           0.16
+          strongly_oppose:  0.12
+        "65+":
+          strongly_support: 0.22
+          support:          0.22
+          neutral:          0.19
+          oppose:           0.20
+          strongly_oppose:  0.17
+      gender:
+        female:
+          strongly_support: 0.43
+          support:          0.25
+          neutral:          0.14
+          oppose:           0.11
+          strongly_oppose:  0.07
+        male:
+          strongly_support: 0.29
+          support:          0.23
+          neutral:          0.18
+          oppose:           0.18
+          strongly_oppose:  0.12
+
+  lower_taxes:
+    label: "Lower Taxes"
+    description: "Government should significantly cut taxes, especially for individuals and small businesses"
+    marginal:
+      strongly_support: 0.30
+      support:          0.28
+      neutral:          0.18
+      oppose:           0.14
+      strongly_oppose:  0.10
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.58
+          support:          0.28
+          neutral:          0.08
+          oppose:           0.04
+          strongly_oppose:  0.02
+        democrat:
+          strongly_support: 0.10
+          support:          0.18
+          neutral:          0.22
+          oppose:           0.28
+          strongly_oppose:  0.22
+        independent:
+          strongly_support: 0.30
+          support:          0.30
+          neutral:          0.22
+          oppose:           0.12
+          strongly_oppose:  0.06
+        other:
+          strongly_support: 0.26
+          support:          0.28
+          neutral:          0.24
+          oppose:           0.14
+          strongly_oppose:  0.08
+      age:
+        "18-29":
+          strongly_support: 0.24
+          support:          0.28
+          neutral:          0.24
+          oppose:           0.16
+          strongly_oppose:  0.08
+        "30-44":
+          strongly_support: 0.28
+          support:          0.28
+          neutral:          0.20
+          oppose:           0.16
+          strongly_oppose:  0.08
+        "45-64":
+          strongly_support: 0.34
+          support:          0.28
+          neutral:          0.18
+          oppose:           0.13
+          strongly_oppose:  0.07
+        "65+":
+          strongly_support: 0.36
+          support:          0.28
+          neutral:          0.18
+          oppose:           0.12
+          strongly_oppose:  0.06
+
+  affordable_housing:
+    label: "Affordable Housing"
+    description: "Government should take significant action to make housing more affordable"
+    marginal:
+      strongly_support: 0.42
+      support:          0.28
+      neutral:          0.14
+      oppose:           0.10
+      strongly_oppose:  0.06
+    conditionals:
+      age:
+        "18-29":
+          strongly_support: 0.58
+          support:          0.26
+          neutral:          0.10
+          oppose:           0.04
+          strongly_oppose:  0.02
+        "30-44":
+          strongly_support: 0.52
+          support:          0.28
+          neutral:          0.11
+          oppose:           0.06
+          strongly_oppose:  0.03
+        "45-64":
+          strongly_support: 0.38
+          support:          0.28
+          neutral:          0.18
+          oppose:           0.11
+          strongly_oppose:  0.05
+        "65+":
+          strongly_support: 0.28
+          support:          0.28
+          neutral:          0.22
+          oppose:           0.16
+          strongly_oppose:  0.06
+      party:
+        democrat:
+          strongly_support: 0.58
+          support:          0.26
+          neutral:          0.10
+          oppose:           0.04
+          strongly_oppose:  0.02
+        republican:
+          strongly_support: 0.22
+          support:          0.28
+          neutral:          0.24
+          oppose:           0.18
+          strongly_oppose:  0.08
+        independent:
+          strongly_support: 0.44
+          support:          0.30
+          neutral:          0.15
+          oppose:           0.08
+          strongly_oppose:  0.03
+        other:
+          strongly_support: 0.46
+          support:          0.28
+          neutral:          0.14
+          oppose:           0.08
+          strongly_oppose:  0.04
+
+  social_security_expansion:
+    label: "Social Security Expansion"
+    description: "Government should protect and expand Social Security benefits rather than cut or privatize them"
+    marginal:
+      strongly_support: 0.44
+      support:          0.28
+      neutral:          0.14
+      oppose:           0.10
+      strongly_oppose:  0.04
+    conditionals:
+      age:
+        "18-29":
+          strongly_support: 0.36
+          support:          0.28
+          neutral:          0.21
+          oppose:           0.12
+          strongly_oppose:  0.03
+        "30-44":
+          strongly_support: 0.42
+          support:          0.28
+          neutral:          0.17
+          oppose:           0.10
+          strongly_oppose:  0.03
+        "45-64":
+          strongly_support: 0.50
+          support:          0.28
+          neutral:          0.12
+          oppose:           0.07
+          strongly_oppose:  0.03
+        "65+":
+          strongly_support: 0.64
+          support:          0.24
+          neutral:          0.08
+          oppose:           0.03
+          strongly_oppose:  0.01
+      party:
+        democrat:
+          strongly_support: 0.58
+          support:          0.26
+          neutral:          0.10
+          oppose:           0.04
+          strongly_oppose:  0.02
+        republican:
+          strongly_support: 0.30
+          support:          0.30
+          neutral:          0.22
+          oppose:           0.14
+          strongly_oppose:  0.04
+        independent:
+          strongly_support: 0.46
+          support:          0.28
+          neutral:          0.14
+          oppose:           0.09
+          strongly_oppose:  0.03
+        other:
+          strongly_support: 0.44
+          support:          0.28
+          neutral:          0.16
+          oppose:           0.08
+          strongly_oppose:  0.04
+
+  military_spending:
+    label: "Military Spending"
+    description: "Government should maintain or increase defense and military spending"
+    marginal:
+      strongly_support: 0.24
+      support:          0.28
+      neutral:          0.24
+      oppose:           0.16
+      strongly_oppose:  0.08
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.48
+          support:          0.32
+          neutral:          0.14
+          oppose:           0.04
+          strongly_oppose:  0.02
+        democrat:
+          strongly_support: 0.09
+          support:          0.22
+          neutral:          0.28
+          oppose:           0.27
+          strongly_oppose:  0.14
+        independent:
+          strongly_support: 0.22
+          support:          0.28
+          neutral:          0.28
+          oppose:           0.16
+          strongly_oppose:  0.06
+        other:
+          strongly_support: 0.16
+          support:          0.26
+          neutral:          0.30
+          oppose:           0.18
+          strongly_oppose:  0.10
+      gender:
+        male:
+          strongly_support: 0.32
+          support:          0.30
+          neutral:          0.22
+          oppose:           0.12
+          strongly_oppose:  0.04
+        female:
+          strongly_support: 0.16
+          support:          0.26
+          neutral:          0.27
+          oppose:           0.21
+          strongly_oppose:  0.10
+
+  minimum_wage_increase:
+    label: "Minimum Wage Increase"
+    description: "The federal minimum wage should be significantly raised"
+    marginal:
+      strongly_support: 0.44
+      support:          0.26
+      neutral:          0.14
+      oppose:           0.10
+      strongly_oppose:  0.06
+    conditionals:
+      party:
+        democrat:
+          strongly_support: 0.66
+          support:          0.22
+          neutral:          0.08
+          oppose:           0.03
+          strongly_oppose:  0.01
+        republican:
+          strongly_support: 0.18
+          support:          0.24
+          neutral:          0.22
+          oppose:           0.22
+          strongly_oppose:  0.14
+        independent:
+          strongly_support: 0.44
+          support:          0.28
+          neutral:          0.16
+          oppose:           0.09
+          strongly_oppose:  0.03
+        other:
+          strongly_support: 0.44
+          support:          0.26
+          neutral:          0.16
+          oppose:           0.10
+          strongly_oppose:  0.04
+      ethnicity:
+        white:
+          strongly_support: 0.38
+          support:          0.26
+          neutral:          0.16
+          oppose:           0.13
+          strongly_oppose:  0.07
+        black:
+          strongly_support: 0.58
+          support:          0.24
+          neutral:          0.10
+          oppose:           0.05
+          strongly_oppose:  0.03
+        hispanic:
+          strongly_support: 0.54
+          support:          0.24
+          neutral:          0.12
+          oppose:           0.07
+          strongly_oppose:  0.03
+        asian:
+          strongly_support: 0.46
+          support:          0.26
+          neutral:          0.14
+          oppose:           0.10
+          strongly_oppose:  0.04
+        "native american/pacific islander":
+          strongly_support: 0.50
+          support:          0.26
+          neutral:          0.12
+          oppose:           0.08
+          strongly_oppose:  0.04
+        other:
+          strongly_support: 0.48
+          support:          0.26
+          neutral:          0.14
+          oppose:           0.08
+          strongly_oppose:  0.04
+
+  school_choice:
+    label: "School Choice"
+    description: "Parents should have more control over their children's education, including public funding for private school vouchers"
+    marginal:
+      strongly_support: 0.28
+      support:          0.26
+      neutral:          0.20
+      oppose:           0.16
+      strongly_oppose:  0.10
+    conditionals:
+      party:
+        republican:
+          strongly_support: 0.50
+          support:          0.28
+          neutral:          0.14
+          oppose:           0.06
+          strongly_oppose:  0.02
+        democrat:
+          strongly_support: 0.12
+          support:          0.20
+          neutral:          0.24
+          oppose:           0.26
+          strongly_oppose:  0.18
+        independent:
+          strongly_support: 0.28
+          support:          0.28
+          neutral:          0.22
+          oppose:           0.14
+          strongly_oppose:  0.08
+        other:
+          strongly_support: 0.26
+          support:          0.26
+          neutral:          0.24
+          oppose:           0.14
+          strongly_oppose:  0.10
+      ethnicity:
+        white:
+          strongly_support: 0.28
+          support:          0.26
+          neutral:          0.22
+          oppose:           0.16
+          strongly_oppose:  0.08
+        black:
+          strongly_support: 0.34
+          support:          0.28
+          neutral:          0.20
+          oppose:           0.12
+          strongly_oppose:  0.06
+        hispanic:
+          strongly_support: 0.36
+          support:          0.28
+          neutral:          0.18
+          oppose:           0.12
+          strongly_oppose:  0.06
+        asian:
+          strongly_support: 0.30
+          support:          0.28
+          neutral:          0.22
+          oppose:           0.14
+          strongly_oppose:  0.06
+        "native american/pacific islander":
+          strongly_support: 0.30
+          support:          0.26
+          neutral:          0.22
+          oppose:           0.14
+          strongly_oppose:  0.08
+        other:
+          strongly_support: 0.26
+          support:          0.26
+          neutral:          0.24
+          oppose:           0.14
+          strongly_oppose:  0.10

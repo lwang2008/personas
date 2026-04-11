@@ -1,6 +1,7 @@
-Hey Lucas, thanks for reaching out!
-Here’s a fun little tech task I’d love to see you explore. Would love to see how you approach it by the end of friday :)
-We’d love for you to build 100 LLM personas modelling one group of humans, and ask them a few single-select survey questions. Your goal is to come up with different methods of creating / modelling personas using LLMs, so that they produce results that capture the human group’s opinions as much as possible.
-We have left this problem intentionally vague - we’d love to see is how you formulate the problem, define objectives and metrics, and how creative you are at using models to achieve your goals with first-principled intuitions in mind.
-When you are ready, just write a plain reply to this email with what you want to share - really, no need to format it! Do share the github link to your code as well - we'd love to see how you structured your codebase / notebook when exploring this.
-Have fun, and looking forward to reading your results soon!asd
+-Build 100 LLM personas modelling one group of humans
+-Ask them a few single-select survey questions
+-Come up with different methods of creating / modelling personas using LLMs, so that they produce results that capture the human group’s opinions as much as possible
+
+-Formulate the problem
+-Define objectives and metrics
+-Creative you are at using models to achieve your goals with first-principled intuitions in mind.
