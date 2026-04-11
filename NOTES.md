@@ -79,3 +79,9 @@ Problems and Fixes:
 4. RLHF when prompting LLM -> persona fights but does not always win. LLM does not understand context behind certain survey questions as deeply as a human is able to. Provide more context to LLM, asking it to reason from each persona's perspective first. Framing of the question affects LLM's response. Downside -> more credits, much slower. 
 
 
+To be implemented:
+    1. additional demographic information (location, etc.)
+    2. additional surveys
+    3. objective metrics for comparing llm survey results with real survey results
+
+
